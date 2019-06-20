@@ -1,0 +1,76 @@
+Answers :
+
+1: Employee Table
+
+CREATE TABLE Employee
+(
+  EmpNo      CHAR(8) PRIMARY KEY NOT NULL,
+  EmpName    VARCHAR(50)         NOT NULL,
+  Department VARCHAR(50)         NOT NULL,
+  Email      VARCHAR(50)         NOT NULL,
+  Phone      CHAR(6)             NOT NULL
+);
+
+
+2:  EVENTPLAN
+
+CREATE TABLE Eventplan
+(
+  PlanNo   CHAR(8)     NOT NULL PRIMARY KEY,
+  EventNo  CHAR(8)     NOT NULL,
+  WorkDate DATE        NOT NULL,
+  Notes    VARCHAR(50),
+  Activity VARCHAR(10) NOT NULL,
+  EmpNo    CHAR(8),
+  CONSTRAINT EventPlan_eventrequest_EventNo_fk FOREIGN KEY (EventNo) REFERENCES eventrequest (EventNo),
+  CONSTRAINT EventPlan_employee_EmpNo_fk FOREIGN KEY (EmpNo) REFERENCES EMPLOYEE (EmpNo)
+);
+
+3: EVENTPLANLINE
+
+CREATE TABLE Eventplanline
+(
+  PlanNo    CHAR(8)  NOT NULL,
+  LineNo    CHAR(1)  NOT NULL,
+  TimeStart DATETIME NOT NULL,
+  TimeEnd   DATETIME NOT NULL,
+  NumberFld INT      NOT NULL,
+  LocNo     CHAR(8)  NOT NULL,
+  ResNo     CHAR(8)  NOT NULL,
+  CONSTRAINT EventPlanLine_location_LocNo_fk FOREIGN KEY (LocNo) REFERENCES location (LocNo),
+  CONSTRAINT EventPlanLine_resourcetbl_ResNo_fk FOREIGN KEY (ResNo) REFERENCES resourcetbl (ResNo),
+  CONSTRAINT EventPlanLine_eventplan_PlanNo_fk FOREIGN KEY (PlanNo) REFERENCES eventplan (PlanNo),
+  CONSTRAINT EventPlanLine_PK PRIMARY KEY (PlanNo, LineNo),
+  CONSTRAINT CHECK (TimeEnd > TimeStart)
+)
+
+
+4: EVENTREQUEST
+
+CREATE TABLE Eventrequest
+(
+  EventNo     CHAR(8) PRIMARY KEY NOT NULL,
+  DateHeld    DATE                NOT NULL,
+  DateReq     DATE                NOT NULL,
+  FacNo       CHAR(8)             NOT NULL,
+  CustNo      CHAR(8)             NOT NULL,
+  DateAuth    DATE,
+  Status      VARCHAR(8)          NOT NULL,
+  EstCost     DECIMAL(10, 2)      NOT NULL,
+  EstAudience INT                 NOT NULL,
+  BudNo       CHAR(8),
+  CONSTRAINT EventRequest_facility_FacNo_fk FOREIGN KEY (FacNo) REFERENCES facility (FacNo),
+  CONSTRAINT EventRequest_customer_CustNo_fk FOREIGN KEY (CustNo) REFERENCES customer (CustNo),
+  CONSTRAINT Chk_Status CHECK (Status IN ("Approved", "Denied", "Pending"))
+)
+
+
+5: Resource table
+
+CREATE TABLE Resourcetbl
+(
+  ResNo   CHAR(8) PRIMARY KEY NOT NULL,
+  ResName VARCHAR(50)         NOT NULL,
+  Rate    DECIMAL(8, 2)       NOT NULL,
+  CONSTRAINT chk_Rate CHECK (Rate > 0)
+);
