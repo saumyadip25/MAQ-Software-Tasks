@@ -1,0 +1,50 @@
+Ans 1 :
+SELECT DISTINCT
+  c.city,
+  c.state,
+  c.zip
+FROM Customer AS c ;
+
+Ans 2:
+
+SELECT
+  e.empName,
+  e.department,
+  e.phone,
+  e.email
+FROM Employee AS e
+WHERE e.phone LIKE '3-%';
+
+Ans 3:
+
+SELECT *
+FROM ResourceTbl AS r
+WHERE r.rate >= 10 AND r.rate <= 20
+ORDER BY r.rate;
+
+Ans 4:
+
+SELECT
+er.evntNo,
+er.dateAuth,
+er.status
+FROM EventRequest AS er
+WHERE (er.status = 'Approved' OR er.status = 'Denied') AND er.dateAuth BETWEEN '2013-07-01' AND '2013-07-31';
+
+Ans 5:
+
+SELECT
+l.locNo,
+l.locName
+FROM Location AS l, Facility AS f
+WHERE l.facNo = f.facNo AND f.facName = 'Basketball arena';
+
+Ans 6:
+
+SELECT
+ep.planNo,
+count(el.planNo),
+sum(el.numberFLD)
+FROM EventPlan AS ep, EventPlanLine AS el
+WHERE ep.planNo = el.planNo
+GROUP BY ep.planNo;
